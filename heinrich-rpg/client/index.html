@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE FATE OF HEINRICH — Medieval Text RPG</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/prose.css">
+  <link rel="stylesheet" href="css/panels.css">
+  <link rel="stylesheet" href="css/modals.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+</head>
+<body>
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- STARTUP SCREEN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="startup-screen" class="screen active">
+    <div class="startup-container">
+      <div class="startup-header">
+        <h1 class="game-title">THE FATE OF HEINRICH</h1>
+        <p class="game-subtitle">A Medieval Text RPG</p>
+        <p class="game-year">Normandy, 1403</p>
+      </div>
+      
+      <!-- LLM Configuration -->
+      <div id="llm-config" class="config-section">
+        <h2>⚙️ Configure Your AI</h2>
+        <p class="config-description">The game uses an AI to generate the story. Configure your connection below.</p>
+        
+        <div class="config-form">
+          <div class="form-group">
+            <label for="llm-provider">Provider</label>
+            <select id="llm-provider">
+              <option value="">Select provider...</option>
+              <option value="openai">OpenAI</option>
+              <option value="anthropic">Anthropic (Claude)</option>
+              <option value="google">Google (Gemini)</option>
+              <option value="mistral">Mistral</option>
+              <option value="ollama">Ollama (Local)</option>
+              <option value="custom">Custom (OpenAI-compatible)</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="api-key-group">
+            <label for="llm-api-key">API Key</label>
+            <input type="password" id="llm-api-key" placeholder="Paste your API key here">
+            <small class="form-hint">Your API key is stored locally and never sent to our servers.</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="llm-model">Model</label>
+            <select id="llm-model">
+              <option value="">Select model...</option>
+            </select>
+            <input type="text" id="llm-model-custom" class="hidden" placeholder="Enter model name">
+          </div>
+          
+          <div class="form-group hidden" id="base-url-group">
+            <label for="llm-base-url">Base URL</label>
+            <input type="text" id="llm-base-url" placeholder="http://localhost:11434">
+          </div>
+          
+          <button id="test-connection-btn" class="btn btn-secondary">Test Connection</button>
+          <div id="connection-status" class="status-message"></div>
+        </div>
+      </div>
+      
+      <!-- Game Start Options -->
+      <div id="game-start" class="config-section">
+        <h2>⚔️ Begin Your Journey</h2>
+        
+        <div class="start-options">
+          <button id="new-game-btn" class="btn btn-primary">New Game</button>
+          <button id="resume-game-btn" class="btn btn-secondary">Resume Game</button>
+        </div>
+      </div>
+      
+      <!-- New Game Form -->
+      <div id="new-game-form" class="config-section hidden">
+        <h2>⚔️ Create Your Character</h2>
+        
+        <div class="config-form">
+          <div class="form-group">
+            <label for="family-name">Family Name</label>
+            <input type="text" id="family-name" value="Renard" placeholder="Enter family name">
+          </div>
+          
+          <div class="form-group">
+            <label for="deepest-want">What does Heinrich want more than anything?</label>
+            <textarea id="deepest-want" rows="2" placeholder="e.g., To be free, to prove himself, to protect his family..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="deepest-fear">What does he fear above all?</label>
+            <textarea id="deepest-fear" rows="2" placeholder="e.g., Dying a serf, being forgotten, losing those he loves..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button id="begin-game-btn" class="btn btn-primary">Begin</button>
+            <button id="cancel-new-game-btn" class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Resume Game Form -->
+      <div id="resume-game-form" class="config-section hidden">
+        <h2>📖 Resume Your Journey</h2>
+        
+        <div class="config-form">
+          <div class="form-group">
+            <label for="session-key-input">Session Key</label>
+            <input type="text" id="session-key-input" placeholder="Enter your 8-character session key" maxlength="8" style="text-transform: uppercase;">
+          </div>
+          
+          <div class="form-actions">
+            <button id="load-game-btn" class="btn btn-primary">Load Game</button>
+            <button id="cancel-resume-btn" class="btn btn-secondary">Cancel</button>
+          </div>
+          
+          <div class="import-section">
+            <p>Or import a saved game file:</p>
+            <input type="file" id="import-file-input" accept=".json" class="hidden">
+            <button id="import-save-btn" class="btn btn-secondary">Import Save File</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Session Key Display -->
+      <div id="session-key-display" class="config-section hidden">
+        <h2>🔑 Your Session Key</h2>
+        <p class="session-warning">SAVE THIS KEY! You'll need it to resume your game.</p>
+        <div class="session-key-box">
+          <span id="session-key-value" class="session-key"></span>
+          <button id="copy-session-key-btn" class="btn btn-small">Copy</button>
+        </div>
+        <button id="start-playing-btn" class="btn btn-primary">Start Playing</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- MAIN GAME SCREEN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="game-screen" class="screen">
+    <!-- Header -->
+    <header id="game-header">
+      <div class="header-left">
+        <span class="header-icon">⚔️</span>
+        <h1 class="header-title">THE FATE OF HEINRICH</h1>
+      </div>
+      <div class="header-center">
+        <span id="header-session" class="session-badge"></span>
+      </div>
+      <div class="header-right">
+        <button id="settings-btn" class="header-btn" title="Settings">⚙️</button>
+      </div>
+    </header>
+    
+    <!-- Main Content Area -->
+    <main id="game-main">
+      <!-- Left Panel: Stats -->
+      <aside id="left-panel" class="panel">
+        <div class="panel-content">
+          <!-- Date & Location -->
+          <div class="stat-section">
+            <div class="stat-row">
+              <span class="stat-icon">📅</span>
+              <span id="stat-date" class="stat-value">1 March 1403</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">🌤️</span>
+              <span id="stat-weather" class="stat-value">Overcast, Cool</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">📍</span>
+              <span id="stat-location" class="stat-value">Normandy</span>
+            </div>
+          </div>
+          
+          <div class="stat-divider"></div>
+          
+          <!-- Health & Status -->
+          <div class="stat-section">
+            <div class="stat-row">
+              <span class="stat-icon">🩸</span>
+              <span class="stat-label">Health</span>
+              <span id="stat-health" class="stat-value">Healthy</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">🍖</span>
+              <span class="stat-label">Hunger</span>
+              <span id="stat-hunger" class="stat-value">Sated</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">😴</span>
+              <span class="stat-label">Fatigue</span>
+              <span id="stat-fatigue" class="stat-value">Fresh</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">🧠</span>
+              <span class="stat-label">Mental</span>
+              <span id="stat-mental" class="stat-value">Steady</span>
+            </div>
+          </div>
+          
+          <div class="stat-divider"></div>
+          
+          <!-- Class & Reputation -->
+          <div class="stat-section">
+            <div class="stat-row">
+              <span class="stat-icon">⚔️</span>
+              <span class="stat-label">Class</span>
+              <span id="stat-class" class="stat-value">Serf</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">🎭</span>
+              <span class="stat-label">Reputation</span>
+              <span id="stat-reputation" class="stat-value">Unknown</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">🚨</span>
+              <span class="stat-label">Heat</span>
+              <span id="stat-heat" class="stat-value">None</span>
+            </div>
+          </div>
+          
+          <div class="stat-divider"></div>
+          
+          <!-- Wealth -->
+          <div class="stat-section">
+            <div class="stat-row">
+              <span class="stat-icon">💰</span>
+              <span class="stat-label">Coin</span>
+              <span id="stat-coin" class="stat-value">3 sous</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">📊</span>
+              <span class="stat-label">Wealth</span>
+              <span id="stat-wealth" class="stat-value">Destitute</span>
+            </div>
+          </div>
+          
+          <div class="stat-divider"></div>
+          
+          <!-- Companions & Romance -->
+          <div class="stat-section">
+            <div class="stat-row">
+              <span class="stat-icon">🐺</span>
+              <span class="stat-label">Animals</span>
+              <span id="stat-animals" class="stat-value">None</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-icon">💕</span>
+              <span class="stat-label">Romance</span>
+              <span id="stat-romance" class="stat-value">None</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+      
+      <!-- Center: Prose Window -->
+      <section id="prose-window" class="panel">
+        <div id="prose-content" class="prose-content">
+          <div class="loading-message">
+            <p>Loading your adventure...</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Right Panel: Info Tabs -->
+      <aside id="right-panel" class="panel">
+        <div class="panel-tabs">
+          <button class="panel-tab active" data-tab="npcs">👥 NPCs</button>
+          <button class="panel-tab" data-tab="inventory">🎒 Inventory</button>
+          <button class="panel-tab" data-tab="map">🗺️ Map</button>
+          <button class="panel-tab" data-tab="skills">📚 Skills</button>
+          <button class="panel-tab" data-tab="holdings">🏛️ Holdings</button>
+          <button class="panel-tab" data-tab="chronicle">📜 Chronicle</button>
+          <button class="panel-tab" data-tab="memory">🧠 Memory</button>
+          <button class="panel-tab" data-tab="consequences">⚡ Consequences</button>
+          <button class="panel-tab" data-tab="inventions">💡 Inventions</button>
+        </div>
+        
+        <div class="panel-content">
+          <!-- NPCs Tab -->
+          <div id="tab-npcs" class="tab-content active">
+            <div class="tab-header">
+              <h3>Present NPCs</h3>
+            </div>
+            <div id="npc-list" class="npc-list">
+              <p class="empty-message">No NPCs present</p>
+            </div>
+          </div>
+          
+          <!-- Inventory Tab -->
+          <div id="tab-inventory" class="tab-content">
+            <div class="tab-header">
+              <h3>Inventory</h3>
+            </div>
+            <div id="inventory-list" class="inventory-list">
+              <div class="inventory-section">
+                <h4>Equipped</h4>
+                <div id="equipped-items"></div>
+              </div>
+              <div class="inventory-section">
+                <h4>Carried</h4>
+                <div id="carried-items"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Map Tab -->
+          <div id="tab-map" class="tab-content">
+            <div class="tab-header">
+              <h3>Map</h3>
+            </div>
+            <div id="map-container" class="map-container">
+              <p class="empty-message">Map will appear here</p>
+            </div>
+          </div>
+          
+          <!-- Skills Tab -->
+          <div id="tab-skills" class="tab-content">
+            <div class="tab-header">
+              <h3>Skill Tree</h3>
+            </div>
+            <div id="skill-tree" class="skill-tree">
+              <p class="empty-message">Loading skills...</p>
+            </div>
+          </div>
+          
+          <!-- Holdings Tab -->
+          <div id="tab-holdings" class="tab-content">
+            <div class="tab-header">
+              <h3>Holdings</h3>
+            </div>
+            <div id="holdings-list" class="holdings-list">
+              <p class="empty-message">No properties owned</p>
+            </div>
+          </div>
+          
+          <!-- Chronicle Tab -->
+          <div id="tab-chronicle" class="tab-content">
+            <div class="tab-header">
+              <h3>Chronicle</h3>
+            </div>
+            <div id="chronicle-entries" class="chronicle-entries">
+              <p class="empty-message">Your story begins...</p>
+            </div>
+          </div>
+          
+          <!-- Memory Tab -->
+          <div id="tab-memory" class="tab-content">
+            <div class="tab-header">
+              <h3>Memory Palace</h3>
+              <input type="text" id="memory-search" placeholder="Search memories..." class="search-input">
+            </div>
+            <div id="memory-list" class="memory-list">
+              <div class="memory-section">
+                <h4>Facts</h4>
+                <div id="memory-facts"></div>
+              </div>
+              <div class="memory-section">
+                <h4>Secrets</h4>
+                <div id="memory-secrets"></div>
+              </div>
+              <div class="memory-section">
+                <h4>Clues</h4>
+                <div id="memory-clues"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Consequences Tab -->
+          <div id="tab-consequences" class="tab-content">
+            <div class="tab-header">
+              <h3>Active Consequences</h3>
+            </div>
+            <div id="consequences-list" class="consequences-list">
+              <p class="empty-message">No active consequences</p>
+            </div>
+          </div>
+          
+          <!-- Inventions Tab -->
+          <div id="tab-inventions" class="tab-content">
+            <div class="tab-header">
+              <h3>Inventions</h3>
+            </div>
+            <div id="inventions-list" class="inventions-list">
+              <p class="empty-message">No inventions conceived yet</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+    
+    <!-- Input Area -->
+    <footer id="input-area">
+      <!-- Choice Buttons -->
+      <div id="choice-buttons" class="choice-buttons">
+        <!-- Choices will be dynamically inserted here -->
+      </div>
+      
+      <!-- Free Input -->
+      <div class="input-row">
+        <div class="input-container">
+          <span class="input-prompt">></span>
+          <input type="text" id="player-input" placeholder="What do you do?" autocomplete="off">
+          <button id="submit-input" class="btn btn-primary">⏎</button>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="quick-btn" data-action="attack">🗡️ Attack</button>
+        <button class="quick-btn" data-action="defend">🛡️ Defend</button>
+        <button class="quick-btn" data-action="flee">🏃 Flee</button>
+        <button class="quick-btn" data-action="look">👁️ Look</button>
+        <button class="quick-btn" data-action="talk">💬 Talk</button>
+        <button class="quick-btn" data-action="inventory">🎒 Inv</button>
+        <button class="quick-btn" data-action="map">🗺️ Map</button>
+        <button class="quick-btn" data-action="rest">💤 Rest</button>
+        <button class="quick-btn" data-action="recall">📖 Recall</button>
+        <button class="quick-btn" data-action="save">💾 Save</button>
+        <button class="quick-btn" data-action="export">📤 Export</button>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- MODALS -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚙️ Settings</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-section">
+          <h3>Game</h3>
+          <div class="setting-row">
+            <label>Session Key</label>
+            <span id="settings-session-key" class="mono"></span>
+          </div>
+          <div class="setting-row">
+            <label>Turn</label>
+            <span id="settings-turn" class="mono"></span>
+          </div>
+          <div class="setting-row">
+            <label>Auto-save</label>
+            <span class="mono">Enabled (every turn)</span>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>LLM Configuration</h3>
+          <div class="setting-row">
+            <label>Provider</label>
+            <span id="settings-provider" class="mono"></span>
+          </div>
+          <div class="setting-row">
+            <label>Model</label>
+            <span id="settings-model" class="mono"></span>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Save Management</h3>
+          <button id="settings-export-btn" class="btn btn-secondary">Export Save</button>
+          <button id="settings-delete-btn" class="btn btn-danger">Delete Save</button>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Display</h3>
+          <div class="setting-row">
+            <label>Font Size</label>
+            <select id="font-size-select">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- NPC Detail Modal -->
+  <div id="npc-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="npc-modal-name">NPC Name</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="npc-modal-content"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Item Detail Modal -->
+  <div id="item-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="item-modal-name">Item Name</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="item-modal-content"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Skill Detail Modal -->
+  <div id="skill-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="skill-modal-name">Skill Name</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="skill-modal-content"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Help Modal -->
+  <div id="help-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>📖 How to Play</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-content">
+          <h3>Basic Controls</h3>
+          <ul>
+            <li><strong>Choice Buttons (A, B, C, D)</strong>: Click to select a presented option</li>
+            <li><strong>Free Input</strong>: Type any action and press Enter</li>
+            <li><strong>Quick Actions</strong>: Common actions at the bottom of the screen</li>
+          </ul>
+          
+          <h3>Tips</h3>
+          <ul>
+            <li>Be specific in your actions — "Search the dusty bookshelf" is better than "Look around"</li>
+            <li>Talk to NPCs to learn about the world and find opportunities</li>
+            <li>Manage your hunger, fatigue, and health — neglect has consequences</li>
+            <li>Skills improve through use — practice makes perfect</li>
+            <li>Save often! The game auto-saves every turn, but exports are good backups</li>
+          </ul>
+          
+          <h3>The World Lives</h3>
+          <p>The world continues whether you act or not. NPCs pursue their own goals, seasons change, and consequences unfold. Time is precious — use it wisely.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tutorial Modal -->
+  <div id="tutorial-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>⚔️ Welcome to THE FATE OF HEINRICH</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="tutorial-content"></div>
+        <div class="tutorial-actions">
+          <button id="tutorial-next" class="btn btn-primary">Next</button>
+          <button id="tutorial-skip" class="btn btn-secondary">Skip Tutorial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Container -->
+  <div id="notification-container" class="notification-container"></div>
+  
+  <!-- Scripts -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

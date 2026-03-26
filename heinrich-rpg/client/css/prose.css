@@ -1,0 +1,339 @@
+/* FILE: client/css/prose.css — PART 2 */
+/* Prose window styling for THE FATE OF HEINRICH */
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* PROSE WINDOW */
+/* ═══════════════════════════════════════════════════════════════ */
+#prose-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-dark);
+  overflow: hidden;
+}
+
+.prose-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  font-family: var(--font-prose);
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  color: var(--color-text-primary);
+  background: 
+    radial-gradient(ellipse at top, rgba(196, 163, 90, 0.03) 0%, transparent 70%),
+    var(--color-bg-dark);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* PROSE PARAGRAPHS */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content p {
+  margin-bottom: var(--spacing-lg);
+  text-indent: 1.5em;
+}
+
+.prose-content p:first-child {
+  text-indent: 0;
+}
+
+.prose-content p:first-child::first-letter {
+  font-size: 2.5em;
+  float: left;
+  line-height: 1;
+  margin-right: 0.1em;
+  margin-top: 0.05em;
+  color: var(--color-gold);
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* PROSE DIALOGUE */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content .dialogue {
+  font-style: italic;
+  margin: var(--spacing-md) 0;
+  padding-left: var(--spacing-lg);
+  border-left: 2px solid var(--color-gold-dark);
+  color: var(--color-text-secondary);
+}
+
+.prose-content .dialogue::before {
+  content: '"';
+  color: var(--color-gold);
+  font-size: var(--font-size-xl);
+  margin-right: 2px;
+}
+
+.prose-content .dialogue::after {
+  content: '"';
+  color: var(--color-gold);
+  font-size: var(--font-size-xl);
+  margin-left: 2px;
+}
+
+.prose-content .speaker {
+  font-weight: 600;
+  color: var(--color-gold);
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* PROSE EMPHASIS */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content em {
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+.prose-content strong {
+  font-weight: 600;
+  color: var(--color-gold-light);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* SKILL CHECK RESULTS */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content .skill-check {
+  background: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+.skill-check-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.skill-check-name {
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.skill-check-level {
+  color: var(--color-text-muted);
+}
+
+.skill-check-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.skill-check-detail {
+  text-align: center;
+}
+
+.skill-check-detail-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.skill-check-detail-value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.skill-check-result {
+  text-align: center;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+}
+
+.skill-check-result.critical {
+  background: var(--color-green);
+  color: var(--color-text-primary);
+}
+
+.skill-check-result.strong {
+  background: var(--color-green-dark);
+  color: var(--color-text-primary);
+}
+
+.skill-check-result.success {
+  background: var(--color-bg-lighter);
+  color: var(--color-text-primary);
+}
+
+.skill-check-result.scraped {
+  background: var(--color-bg-light);
+  color: var(--color-text-secondary);
+}
+
+.skill-check-result.near-miss {
+  background: var(--color-red-dark);
+  color: var(--color-text-primary);
+}
+
+.skill-check-result.failure {
+  background: var(--color-red);
+  color: var(--color-text-primary);
+}
+
+.skill-check-result.disaster {
+  background: var(--color-red-light);
+  color: var(--color-bg-dark);
+}
+
+.skill-check-xp {
+  text-align: center;
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* INLINE GAME ELEMENTS */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content .item-mention {
+  color: var(--color-gold);
+  font-weight: 500;
+  cursor: help;
+  border-bottom: 1px dotted var(--color-gold-dark);
+}
+
+.prose-content .npc-mention {
+  color: var(--color-gold-light);
+  font-weight: 500;
+  cursor: help;
+  border-bottom: 1px dotted var(--color-gold-dark);
+}
+
+.prose-content .location-mention {
+  color: var(--color-blue-light);
+  font-weight: 500;
+  cursor: help;
+  border-bottom: 1px dotted var(--color-blue);
+}
+
+.prose-content .danger-mention {
+  color: var(--color-red-light);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* LOADING & ERROR STATES */
+/* ═══════════════════════════════════════════════════════════════ */
+.loading-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-message {
+  background: var(--color-red-dark);
+  border: 1px solid var(--color-red);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.error-message h4 {
+  color: var(--color-red-light);
+  margin-bottom: var(--spacing-sm);
+}
+
+.error-message p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* PROSE FORMATTING */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold-dark), transparent);
+  margin: var(--spacing-2xl) 0;
+}
+
+.prose-content .scene-break {
+  text-align: center;
+  margin: var(--spacing-2xl) 0;
+  color: var(--color-gold);
+  font-size: var(--font-size-xl);
+  letter-spacing: 8px;
+}
+
+.prose-content .time-skip {
+  text-align: center;
+  margin: var(--spacing-2xl) 0;
+  padding: var(--spacing-lg);
+  background: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* NOTIFICATION INLINE */
+/* ═══════════════════════════════════════════════════════════════ */
+.prose-content .notification-inline {
+  background: var(--color-bg-medium);
+  border-left: 3px solid var(--color-gold);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.prose-content .notification-inline.warning {
+  border-left-color: var(--color-red);
+}
+
+.prose-content .notification-inline.success {
+  border-left-color: var(--color-green);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* FONT SIZE VARIATIONS */
+/* ═══════════════════════════════════════════════════════════════ */
+body.font-small .prose-content {
+  font-size: var(--font-size-base);
+  line-height: 1.7;
+}
+
+body.font-medium .prose-content {
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+}
+
+body.font-large .prose-content {
+  font-size: var(--font-size-xl);
+  line-height: 1.9;
+}
+/* END FILE: client/css/prose.css */

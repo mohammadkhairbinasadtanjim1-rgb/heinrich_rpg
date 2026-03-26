@@ -1,0 +1,538 @@
+/* FILE: client/css/responsive.css — PART 2 */
+/* Mobile/responsive rules for THE FATE OF HEINRICH */
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* DESKTOP (default) */
+/* ═══════════════════════════════════════════════════════════════ */
+/* Desktop layout is defined in main.css, panels.css, etc. */
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* LARGE DESKTOP (1400px+) */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (min-width: 1400px) {
+  :root {
+    --panel-width: 320px;
+  }
+  
+  .prose-content {
+    padding: var(--spacing-2xl) var(--spacing-2xl);
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* TABLET (768px - 1024px) */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  :root {
+    --panel-width: 240px;
+  }
+  
+  .prose-content {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    font-size: var(--font-size-base);
+  }
+  
+  .panel-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .panel-tab {
+    flex-shrink: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* SMALL TABLET / LARGE PHONE (600px - 768px) */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    --panel-width: 200px;
+    --header-height: 45px;
+    --input-area-height: 120px;
+  }
+  
+  /* Hide side panels, show as overlays */
+  #left-panel,
+  #right-panel {
+    position: fixed;
+    top: var(--header-height);
+    bottom: var(--input-area-height);
+    width: 280px;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  #left-panel {
+    left: 0;
+  }
+  
+  #right-panel {
+    right: 0;
+    transform: translateX(100%);
+  }
+  
+  #left-panel.open {
+    transform: translateX(0);
+  }
+  
+  #right-panel.open {
+    transform: translateX(0);
+  }
+  
+  /* Panel toggle buttons */
+  .panel-toggle {
+    position: fixed;
+    top: calc(var(--header-height) + var(--spacing-md));
+    z-index: 101;
+    background: var(--color-bg-medium);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    color: var(--color-gold);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .panel-toggle-left {
+    left: var(--spacing-md);
+  }
+  
+  .panel-toggle-right {
+    right: var(--spacing-md);
+  }
+  
+  /* Prose takes full width */
+  #prose-window {
+    width: 100%;
+  }
+  
+  .prose-content {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  
+  /* Header adjustments */
+  .header-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .session-badge {
+    font-size: var(--font-size-xs);
+  }
+  
+  /* Input area adjustments */
+  .choice-buttons {
+    flex-direction: column;
+  }
+  
+  .choice-btn {
+    min-width: auto;
+  }
+  
+  .quick-actions {
+    justify-content: center;
+  }
+  
+  .quick-btn {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
+  
+  /* Modal adjustments */
+  .modal-content {
+    max-width: 90%;
+    margin: var(--spacing-md);
+  }
+  
+  .modal-content.modal-large {
+    max-width: 95%;
+  }
+  
+  /* Notification adjustments */
+  .notification-container {
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    max-width: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* PHONE (480px - 600px) */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  :root {
+    --header-height: 40px;
+    --input-area-height: 110px;
+    --spacing-lg: 1rem;
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+  }
+  
+  /* Startup screen */
+  .startup-container {
+    padding: var(--spacing-md);
+  }
+  
+  .game-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .game-subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .config-section {
+    padding: var(--spacing-md);
+  }
+  
+  .start-options {
+    flex-direction: column;
+  }
+  
+  .start-options .btn {
+    width: 100%;
+  }
+  
+  /* Header */
+  .header-icon {
+    font-size: var(--font-size-base);
+  }
+  
+  .header-title {
+    font-size: var(--font-size-sm);
+  }
+  
+  .header-btn {
+    font-size: var(--font-size-base);
+  }
+  
+  /* Prose */
+  .prose-content {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+  }
+  
+  .prose-content p:first-child::first-letter {
+    font-size: 2em;
+  }
+  
+  /* Skill check results */
+  .skill-check {
+    padding: var(--spacing-sm);
+  }
+  
+  .skill-check-details {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xs);
+  }
+  
+  /* Input area */
+  #input-area {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .input-prompt {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  #player-input {
+    font-size: var(--font-size-sm);
+  }
+  
+  .quick-btn {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+  
+  /* Panels (overlay mode) */
+  #left-panel,
+  #right-panel {
+    width: 100%;
+    transform: translateX(-100%);
+  }
+  
+  #right-panel {
+    transform: translateX(100%);
+  }
+  
+  .panel-content {
+    padding: var(--spacing-sm);
+  }
+  
+  .panel-tab {
+    font-size: 10px;
+    padding: var(--spacing-xs);
+  }
+  
+  /* Modals */
+  .modal {
+    padding: var(--spacing-sm);
+  }
+  
+  .modal-content {
+    max-width: 100%;
+    max-height: 90vh;
+    margin: 0;
+  }
+  
+  .modal-header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .modal-header h2 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .modal-body {
+    padding: var(--spacing-md);
+  }
+  
+  /* NPC detail modal */
+  .npc-detail-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .npc-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Item detail modal */
+  .item-detail-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .item-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Notifications */
+  .notification-container {
+    top: var(--spacing-sm);
+    left: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+  
+  .notification {
+    padding: var(--spacing-sm);
+  }
+  
+  .notification-title {
+    font-size: var(--font-size-xs);
+  }
+  
+  .notification-message {
+    font-size: 11px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* SMALL PHONE (< 480px) */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  :root {
+    --header-height: 36px;
+    --input-area-height: 100px;
+  }
+  
+  .game-title {
+    font-size: var(--font-size-xl);
+    letter-spacing: 1px;
+  }
+  
+  .game-subtitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .game-year {
+    font-size: var(--font-size-xs);
+  }
+  
+  .prose-content {
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+  }
+  
+  .prose-content p:first-child::first-letter {
+    font-size: 1.8em;
+  }
+  
+  .choice-btn {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
+  
+  .quick-actions {
+    gap: 2px;
+  }
+  
+  .quick-btn {
+    font-size: 9px;
+    padding: 3px 4px;
+  }
+  
+  .session-key {
+    font-size: var(--font-size-lg);
+    letter-spacing: 2px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* TOUCH DEVICE ADJUSTMENTS */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase tap targets */
+  .btn {
+    min-height: 44px;
+  }
+  
+  .choice-btn {
+    min-height: 48px;
+  }
+  
+  .quick-btn {
+    min-height: 36px;
+  }
+  
+  .panel-tab {
+    min-height: 36px;
+  }
+  
+  .npc-item,
+  .inventory-item,
+  .skill-item,
+  .branch-item {
+    min-height: 44px;
+  }
+  
+  /* Remove hover effects that don't work on touch */
+  .npc-item:hover,
+  .inventory-item:hover,
+  .skill-item:hover,
+  .branch-item:hover,
+  .choice-btn:hover,
+  .quick-btn:hover {
+    background: var(--color-bg-light);
+    border-color: var(--color-border);
+  }
+  
+  /* Active state for touch */
+  .npc-item:active,
+  .inventory-item:active,
+  .skill-item:active,
+  .branch-item:active,
+  .choice-btn:active,
+  .quick-btn:active {
+    background: var(--color-bg-lighter);
+    border-color: var(--color-gold-dark);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* LANDSCAPE ORIENTATION ON PHONES */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-height: 32px;
+    --input-area-height: 80px;
+  }
+  
+  .startup-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+  
+  .startup-header {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .config-section {
+    flex: 1;
+    min-width: 280px;
+    margin-bottom: 0;
+  }
+  
+  .prose-content {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .prose-content p:first-child::first-letter {
+    font-size: 1.5em;
+  }
+  
+  .choice-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .choice-btn {
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  .quick-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+  }
+  
+  .quick-btn {
+    flex-shrink: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* HIGH CONTRAST / ACCESSIBILITY */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #6a6050;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #e0d0c0;
+  }
+  
+  .btn {
+    border-width: 2px;
+  }
+  
+  .skill-check-result {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* REDUCED MOTION */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .loading-spinner {
+    animation: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* DARK MODE (already dark, but ensure consistency) */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: light) {
+  /* Game is intentionally dark-themed, ignore system preference */
+}
+/* END FILE: client/css/responsive.css */
